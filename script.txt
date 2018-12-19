@@ -1,0 +1,82 @@
+Public Sub GeneralMarking()
+Application.ScreenUpdating = False
+Application.DisplayAlerts = False
+On Error Resume Next
+iUsername$ = VBA.Environ$("USERNAME")
+timestamp$ = Format(Time(), "Hh:Nn:Ss")
+nonhidencellfind:
+ActiveCell.Offset(-1, 0).Select
+If ActiveCell.EntireRow.Hidden = True Then
+    GoTo nonhidencellfind
+End If
+If Selection.Value = "E" Or Selection.Value = "e" Or Selection.Value = "Ó" Or Selection.Value = "ó" Then
+    Selection.Interior.ColorIndex = 3
+    Selection.Value = (iUsername$ + " " + timestamp$)
+End If
+If Selection.Value = "Û" Or Selection.Value = "û" Or Selection.Value = "S" Or Selection.Value = "s" Then
+    Selection.Interior.Color = 49407
+    Selection.Value = (iUsername$ + " " + timestamp$)
+End If
+If Selection.Value = "C" Or Selection.Value = "c" Or Selection.Value = "Ñ" Or Selection.Value = "ñ" Then
+    Selection.Interior.Color = 5296274
+    Selection.Value = (iUsername$ + " " + timestamp$)
+End If
+If Selection.Value = "ß" Or Selection.Value = "ÿ" Or Selection.Value = "Z" Or Selection.Value = "z" Then
+    Selection.Interior.ThemeColor = xlThemeColorDark1
+    Selection.Interior.TintAndShade = -0.349986266670736
+    Selection.Value = "Omitted"
+End If
+If Selection.Value = "L" Or Selection.Value = "l" Or Selection.Value = "Ä" Or Selection.Value = "ä" Then
+    Selection.Interior.ColorIndex = 3
+    Selection.Value = "!LATE!"
+End If
+If Selection.Value = "P" Or Selection.Value = "p" Or Selection.Value = "Ç" Or Selection.Value = "ç" Then
+        Selection.Offset(0, -1).Copy
+        With Selection.Interior
+            .Pattern = Selection.Offset(0, -1).Interior.Pattern
+            .PatternColorIndex = Selection.Offset(0, -1).Interior.PatternColorIndex
+            .ThemeColor = Selection.Offset(0, -1).Interior.ThemeColor
+            .TintAndShade = Selection.Offset(0, -1).Interior.TintAndShade
+            .PatternTintAndShade = Selection.Offset(0, -1).Interior.PatternTintAndShade
+        End With
+        Selection.ClearContents
+End If
+nonhidencellfind2:
+ActiveCell.Offset(1, 0).Select
+If ActiveCell.EntireRow.Hidden = True Then
+    GoTo nonhidencellfind2
+End If
+On Error GoTo 0
+Application.DisplayAlerts = True
+Application.ScreenUpdating = True
+End Sub
+Public Function markascomp(cellstomark As Range, cellcolor As String)
+Application.ScreenUpdating = False
+iUsername$ = VBA.Environ$("USERNAME")
+timestamp$ = Format(Time(), "Hh:Nn:Ss")
+For Each C In cellstomark
+    If C.Locked = False Then
+        If C.EntireRow.Hidden = False Then
+            If cellcolor = "green" Then
+                If C.Interior.Color <> 5296274 Then
+                    C.Value = (iUsername$ + " " + timestamp$)
+                    C.Interior.Color = 5296274
+                End If
+            ElseIf cellcolor = "orange" Then
+                If C.Interior.Color <> 5296274 Then
+                    C.Value = (iUsername$ + " " + timestamp$)
+                    C.Interior.Color = 49407
+                End If
+            ElseIf cellcolor = "grey" Then
+                C.Interior.ThemeColor = xlThemeColorDark1
+                C.Interior.TintAndShade = -0.349986266670736
+                C.Value = "Omitted"
+            ElseIf cellcolor = "red" Then
+                C.Interior.ColorIndex = 3
+                C.Value = (iUsername$ + " " + timestamp$)
+            End If
+        End If
+    End If
+Next
+Application.ScreenUpdating = True
+End Function
